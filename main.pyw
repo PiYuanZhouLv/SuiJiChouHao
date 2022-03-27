@@ -25,9 +25,13 @@ try:
 except (FileNotFoundError, ValueError):
     out = []
 left = list(range(1, 66))
-for o in out:
+addtion = []
+for o in out[:]:
     if o in left:
         left.remove(o)
+    elif o < 0:
+        addtion.append(-o)
+        out.remove(o)
 
 running = False
 def running_text(text):
@@ -47,12 +51,17 @@ def start(*args):
     if running:
         running = False
     sb['state'] = 'disabled'
-    lucky = random.choice(left)
-    left.remove(lucky)
-    out.append(lucky)
-    if not left:
+    lucky = random.choice(left+addtion)
+    if random.random() <= 0.5:
+        if lucky > 0:
+            left.remove(lucky)
+            out.append(lucky)
+        else:
+            addtion.remove(lucky)
+    if not left+addtion:
         left = list(range(1, 66))
         out = []
+    lucky = abs(lucky)
     n1l['bg'] = "#FFC0C0"
     n2l['bg'] = "#FFC0C0"
     n1.set('?')
@@ -103,7 +112,7 @@ sb.grid(column=0, row=2, columnspan=2, sticky='nesw')
 def on_close(*args):
     global running
     running = False
-    open('sjch.setting', 'w').write(','.join([str(i) for i in out]))
+    open('sjch.setting', 'w').write(','.join([str(i) for i in out+addtion]))
     root.destroy()
 
 root.protocol('WM_DELETE_WINDOW', on_close)
