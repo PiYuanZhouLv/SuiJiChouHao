@@ -30,7 +30,7 @@ for o in out[:]:
     if o in left:
         left.remove(o)
     elif o < 0:
-        addtion.append(-o)
+        addtion.append(o)
         out.remove(o)
 
 running = False
@@ -52,7 +52,7 @@ def start(*args):
         running = False
     sb['state'] = 'disabled'
     lucky = random.choice(left+addtion)
-    if random.random() <= 0.5:
+    if len(left+addtion) >= 10 and random.random() <= 0.5:
         if lucky > 0:
             left.remove(lucky)
             out.append(lucky)
